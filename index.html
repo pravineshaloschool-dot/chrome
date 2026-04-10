@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google New Tab UI Clone</title>
+    <style>
+        :root {
+            --bg: #413e59;
+            --topbar: #2f2c42;
+            --topbar-2: #35324a;
+            --surface: #f0f1f3;
+            --surface-soft: #5a576f;
+            --text: #ececf3;
+            --muted: #b6b6cb;
+            --chip: #e6e7eb;
+            --button: #5f4bb1;
+            --button-border: #7760cb;
+            --logo: #c9b8ff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at 30% 0%, #4d4967 0%, var(--bg) 50%, #3c3955 100%);
+            min-height: 100vh;
+        }
+
+        .window {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chrome-ui {
+            background: linear-gradient(180deg, var(--topbar), var(--topbar-2));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+        }
+
+        .tab-row {
+            height: 44px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 10px;
+        }
+
+        .tab {
+            min-width: 225px;
+            height: 32px;
+            border-radius: 10px 10px 0 0;
+            background: #403c56;
+            color: #dbd9e8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 14px;
+            font-size: 14px;
+        }
+
+        .tab-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #8d8ba5;
+        }
+
+        .plus {
+            font-size: 24px;
+            line-height: 1;
+            color: #c8c8d9;
+        }
+
+        .address-row {
+            height: 52px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 14px;
+        }
+
+        .window-btn {
+            width: 24px;
+            text-align: center;
+            color: #c5c3d3;
+            font-size: 17px;
+        }
+
+        .omnibox {
+            flex: 1;
+            height: 36px;
+            border-radius: 20px;
+            background: #252238;
+            color: #d8d7e8;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .omnibox svg {
+            width: 18px;
+            height: 18px;
+            fill: #a8a7bb;
+        }
+
+        .bookmark-row {
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 0 12px 8px;
+            color: #d2d2e2;
+            font-size: 17px;
+        }
+
+        .bookmark-item {
+            font-size: 14px;
+            color: #d8d7e5;
+            white-space: nowrap;
+        }
+
+        .new-tab {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 20px 90px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 18px;
+            font-size: 24px;
+            margin-bottom: 90px;
+        }
+
+        .actions a {
+            color: #f2f2f7;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .actions .app-grid {
+            width: 26px;
+            height: 26px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+
+        .actions .app-grid span {
+            background: #e8e8ef;
+            border-radius: 50%;
+            opacity: 0.9;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f2a06a, #f7d07e);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .search-wrap {
+            width: min(880px, 100%);
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .logo {
+            margin: 0 0 34px;
+            font-size: clamp(60px, 8vw, 96px);
+            line-height: 1;
+            color: var(--logo);
+            font-weight: 600;
+            letter-spacing: -0.04em;
+        }
+
+        .google-search {
+            width: 100%;
+            height: 62px;
+            border-radius: 34px;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 14px 0 20px;
+            color: #5b5f6b;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+        }
+
+        .google-search .left-icon,
+        .google-search .icon-btn {
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .google-search svg {
+            width: 21px;
+            height: 21px;
+            fill: #565a67;
+        }
+
+        .google-search .placeholder {
+            flex: 1;
+            text-align: left;
+            font-size: clamp(22px, 2vw, 35px);
+            color: #5f6370;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ai-chip {
+            height: 44px;
+            padding: 0 18px;
+            border-radius: 24px;
+            border: 1px solid #d1d4db;
+            background: var(--chip);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: clamp(20px, 1.6vw, 30px);
+            color: #373b46;
+            white-space: nowrap;
+        }
+
+        .shortcuts {
+            width: min(1080px, 100%);
+            margin: 44px auto 0;
+            display: grid;
+            grid-template-columns: repeat(10, minmax(74px, 1fr));
+            gap: 22px;
+        }
+
+        .shortcut {
+            text-align: center;
+            color: #f3f3f8;
+            font-size: 29px;
+        }
+
+        .shortcut-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            background: rgba(255, 255, 255, 0.12);
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            color: #e9e9f5;
+        }
+
+        .shortcut span {
+            display: block;
+            font-size: 18px;
+            color: #f0f0f7;
+            text-transform: lowercase;
+        }
+
+        .customize {
+            position: fixed;
+            right: 20px;
+            bottom: 16px;
+            height: 44px;
+            border-radius: 24px;
+            border: 1px solid var(--button-border);
+            background: var(--button);
+            color: #f6f2ff;
+            padding: 0 18px;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 18px rgba(45, 32, 85, 0.35);
+        }
+
+        @media (max-width: 1200px) {
+            .shortcuts {
+                grid-template-columns: repeat(5, minmax(74px, 1fr));
+            }
+        }
+
+        @media (max-width: 860px) {
+            .chrome-ui {
+                display: none;
+            }
+
+            .new-tab {
+                padding-top: 20px;
+            }
+
+            .actions {
+                margin-bottom: 40px;
+                gap: 12px;
+            }
+
+            .actions a {
+                font-size: 16px;
+            }
+
+            .logo {
+                margin-bottom: 22px;
+            }
+
+            .google-search {
+                height: 54px;
+            }
+
+            .google-search .placeholder,
+            .ai-chip {
+                font-size: 16px;
+            }
+
+            .shortcuts {
+                grid-template-columns: repeat(3, minmax(74px, 1fr));
+                gap: 14px;
+                margin-top: 28px;
+            }
+
+            .shortcut-circle {
+                width: 58px;
+                height: 58px;
+            }
+
+            .shortcut span {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <header class="chrome-ui">
+            <div class="tab-row">
+                <div class="tab">
+                    <span class="tab-dot"></span>
+                    <span>New Tab</span>
+                </div>
+                <span class="plus">+</span>
+            </div>
+            <div class="address-row">
+                <span class="window-btn">&#x2039;</span>
+                <span class="window-btn">&#x203A;</span>
+                <div class="omnibox">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15.5 14h-.8l-.3-.3a6 6 0 1 0-.7.7l.3.3v.8L19 20l1-1-4.5-5zM10 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                    </svg>
+                    <span>Search Google or type a URL</span>
+                </div>
+            </div>
+            <div class="bookmark-row">
+                <span style="font-size:20px;">&#9638;</span>
+                <div class="bookmark-item">ALO SCHOOL - stud...</div>
+                <div class="bookmark-item">Adobe Express</div>
+                <div class="bookmark-item">Online-Fix - Launchi...</div>
+            </div>
+        </header>
+
+        <main class="new-tab">
+            <div class="actions">
+                <a href="#">Gmail</a>
+                <a href="#">Images</a>
+                <span style="font-size:26px;">&#x2697;</span>
+                <div class="app-grid" aria-label="Apps">
+                    <span></span><span></span><span></span>
+                    <span></span><span></span><span></span>
+                    <span></span><span></span><span></span>
+                </div>
+                <div class="avatar" aria-hidden="true"></div>
+            </div>
+
+            <section class="search-wrap">
+                <h1 class="logo">Google</h1>
+                <div class="google-search">
+                    <span class="left-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M15.5 14h-.8l-.3-.3a6 6 0 1 0-.7.7l.3.3v.8L19 20l1-1-4.5-5zM10 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                        </svg>
+                    </span>
+                    <span class="placeholder">Search Google or type a URL</span>
+                    <span class="icon-btn">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V22h2v-3.1A7 7 0 0 0 19 12h-2z"/>
+                        </svg>
+                    </span>
+                    <span class="icon-btn">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M9 4 7.2 6H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.2L15 4H9zm3 13a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
+                        </svg>
+                    </span>
+                    <span class="ai-chip">
+                        <span style="font-size:18px;">&#10035;</span>
+                        <span>AI Mode</span>
+                    </span>
+                </div>
+            </section>
+
+            <section class="shortcuts">
+                <div class="shortcut"><div class="shortcut-circle">W</div><span>png wing</span></div>
+                <div class="shortcut"><div class="shortcut-circle">F</div><span>flaticon</span></div>
+                <div class="shortcut"><div class="shortcut-circle">C</div><span>color hint</span></div>
+                <div class="shortcut"><div class="shortcut-circle">F</div><span>freepik</span></div>
+                <div class="shortcut"><div class="shortcut-circle">C</div><span>chatgpt</span></div>
+                <div class="shortcut"><div class="shortcut-circle">P</div><span>pinterest</span></div>
+                <div class="shortcut"><div class="shortcut-circle">M</div><span>mockupfree</span></div>
+                <div class="shortcut"><div class="shortcut-circle">A</div><span>anime</span></div>
+                <div class="shortcut"><div class="shortcut-circle">V</div><span>memes</span></div>
+                <div class="shortcut"><div class="shortcut-circle">*</div><span>claud</span></div>
+            </section>
+        </main>
+    </div>
+
+    <button class="customize" type="button">
+        <span style="font-size:17px;">&#9998;</span>
+        <span>Customize Chrome</span>
+    </button>
+</body>
+</html>
