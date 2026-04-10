@@ -3,429 +3,579 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google New Tab UI Clone</title>
+    <title>Scoop Street Creamery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #413e59;
-            --topbar: #2f2c42;
-            --topbar-2: #35324a;
-            --surface: #f0f1f3;
-            --surface-soft: #5a576f;
-            --text: #ececf3;
-            --muted: #b6b6cb;
-            --chip: #e6e7eb;
-            --button: #5f4bb1;
-            --button-border: #7760cb;
-            --logo: #c9b8ff;
+            --vanilla: #fff5e7;
+            --peach: #ffd8a8;
+            --strawberry: #ff7f74;
+            --mint: #7ed8b2;
+            --choco: #56392d;
+            --berry-ink: #2d2244;
+            --sun: #ffc95f;
+            --card: #fffdf8;
+            --shadow: 0 18px 35px rgba(45, 34, 68, 0.14);
         }
 
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text);
-            background: radial-gradient(circle at 30% 0%, #4d4967 0%, var(--bg) 50%, #3c3955 100%);
+            font-family: "Manrope", sans-serif;
+            color: var(--berry-ink);
             min-height: 100vh;
+            background:
+                radial-gradient(circle at 10% 18%, rgba(255, 127, 116, 0.25) 0, transparent 36%),
+                radial-gradient(circle at 86% 20%, rgba(126, 216, 178, 0.3) 0, transparent 34%),
+                radial-gradient(circle at 80% 92%, rgba(255, 201, 95, 0.2) 0, transparent 30%),
+                linear-gradient(145deg, #fffaf2 0%, #ffefd8 100%);
+            overflow-x: hidden;
         }
 
-        .window {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chrome-ui {
-            background: linear-gradient(180deg, var(--topbar), var(--topbar-2));
-            border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-        }
-
-        .tab-row {
-            height: 44px;
-            display: flex;
-            align-items: center;
-            padding: 0 12px;
-            gap: 10px;
-        }
-
-        .tab {
-            min-width: 225px;
-            height: 32px;
-            border-radius: 10px 10px 0 0;
-            background: #403c56;
-            color: #dbd9e8;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0 14px;
-            font-size: 14px;
-        }
-
-        .tab-dot {
-            width: 16px;
-            height: 16px;
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            z-index: -1;
             border-radius: 50%;
-            background: #8d8ba5;
+            filter: blur(2px);
+            opacity: 0.5;
+            animation: drift 12s ease-in-out infinite alternate;
         }
 
-        .plus {
-            font-size: 24px;
-            line-height: 1;
-            color: #c8c8d9;
+        body::before {
+            width: 220px;
+            height: 220px;
+            background: rgba(255, 127, 116, 0.4);
+            left: -70px;
+            top: 55%;
         }
 
-        .address-row {
-            height: 52px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0 14px;
+        body::after {
+            width: 260px;
+            height: 260px;
+            background: rgba(126, 216, 178, 0.4);
+            right: -90px;
+            top: 4%;
+            animation-delay: 1.6s;
         }
 
-        .window-btn {
-            width: 24px;
-            text-align: center;
-            color: #c5c3d3;
-            font-size: 17px;
-        }
-
-        .omnibox {
-            flex: 1;
-            height: 36px;
-            border-radius: 20px;
-            background: #252238;
-            color: #d8d7e8;
-            display: flex;
-            align-items: center;
-            padding: 0 14px;
-            gap: 10px;
-            font-size: 16px;
-        }
-
-        .omnibox svg {
-            width: 18px;
-            height: 18px;
-            fill: #a8a7bb;
-        }
-
-        .bookmark-row {
-            min-height: 34px;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            padding: 0 12px 8px;
-            color: #d2d2e2;
-            font-size: 17px;
-        }
-
-        .bookmark-item {
-            font-size: 14px;
-            color: #d8d7e5;
-            white-space: nowrap;
-        }
-
-        .new-tab {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 32px 20px 90px;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 18px;
-            font-size: 24px;
-            margin-bottom: 90px;
-        }
-
-        .actions a {
-            color: #f2f2f7;
-            text-decoration: none;
-            font-size: 24px;
-        }
-
-        .actions .app-grid {
-            width: 26px;
-            height: 26px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-        }
-
-        .actions .app-grid span {
-            background: #e8e8ef;
-            border-radius: 50%;
-            opacity: 0.9;
-        }
-
-        .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #f2a06a, #f7d07e);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .search-wrap {
-            width: min(880px, 100%);
+        .wrap {
+            width: min(1120px, 92%);
             margin: 0 auto;
-            text-align: center;
+            padding-bottom: 48px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 26px 0;
+            animation: fade-up 0.7s ease;
         }
 
         .logo {
-            margin: 0 0 34px;
-            font-size: clamp(60px, 8vw, 96px);
-            line-height: 1;
-            color: var(--logo);
-            font-weight: 600;
-            letter-spacing: -0.04em;
+            font-family: "Bungee", sans-serif;
+            font-size: 1.18rem;
+            letter-spacing: 1px;
+            color: var(--choco);
+            text-decoration: none;
         }
 
-        .google-search {
-            width: 100%;
-            height: 62px;
-            border-radius: 34px;
-            background: var(--surface);
+        nav {
             display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 0 14px 0 20px;
-            color: #5b5f6b;
-            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+            gap: 28px;
         }
 
-        .google-search .left-icon,
-        .google-search .icon-btn {
-            width: 28px;
-            height: 28px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .google-search svg {
-            width: 21px;
-            height: 21px;
-            fill: #565a67;
-        }
-
-        .google-search .placeholder {
-            flex: 1;
-            text-align: left;
-            font-size: clamp(22px, 2vw, 35px);
-            color: #5f6370;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .ai-chip {
-            height: 44px;
-            padding: 0 18px;
-            border-radius: 24px;
-            border: 1px solid #d1d4db;
-            background: var(--chip);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: clamp(20px, 1.6vw, 30px);
-            color: #373b46;
-            white-space: nowrap;
-        }
-
-        .shortcuts {
-            width: min(1080px, 100%);
-            margin: 44px auto 0;
-            display: grid;
-            grid-template-columns: repeat(10, minmax(74px, 1fr));
-            gap: 22px;
-        }
-
-        .shortcut {
-            text-align: center;
-            color: #f3f3f8;
-            font-size: 29px;
-        }
-
-        .shortcut-circle {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            margin: 0 auto 10px;
-            background: rgba(255, 255, 255, 0.12);
-            display: grid;
-            place-items: center;
+        nav a {
+            text-decoration: none;
+            color: var(--berry-ink);
             font-weight: 700;
-            color: #e9e9f5;
+            position: relative;
         }
 
-        .shortcut span {
-            display: block;
-            font-size: 18px;
-            color: #f0f0f7;
-            text-transform: lowercase;
+        nav a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            left: 0;
+            bottom: -6px;
+            background: var(--strawberry);
+            transition: width 0.25s ease;
         }
 
-        .customize {
-            position: fixed;
-            right: 20px;
-            bottom: 16px;
-            height: 44px;
-            border-radius: 24px;
-            border: 1px solid var(--button-border);
-            background: var(--button);
-            color: #f6f2ff;
-            padding: 0 18px;
-            font-size: 16px;
-            display: inline-flex;
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.12fr 0.88fr;
+            gap: 42px;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 8px 18px rgba(45, 32, 85, 0.35);
+            padding: 24px 0 56px;
         }
 
-        @media (max-width: 1200px) {
-            .shortcuts {
-                grid-template-columns: repeat(5, minmax(74px, 1fr));
+        .hero h1 {
+            font-family: "Bungee", sans-serif;
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            line-height: 1.05;
+            color: var(--choco);
+            margin-bottom: 18px;
+            animation: fade-up 0.8s ease both;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 1.7vw, 1.15rem);
+            max-width: 560px;
+            line-height: 1.75;
+            margin-bottom: 30px;
+            animation: fade-up 0.8s 0.12s ease both;
+        }
+
+        .cta-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            animation: fade-up 0.8s 0.24s ease both;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 999px;
+            padding: 13px 22px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--strawberry);
+            color: #fff;
+            box-shadow: 0 10px 18px rgba(255, 127, 116, 0.36);
+        }
+
+        .btn-ghost {
+            background: #fff;
+            color: var(--berry-ink);
+            border: 2px solid rgba(45, 34, 68, 0.16);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .hero-art {
+            background: linear-gradient(160deg, rgba(255, 216, 168, 0.7), rgba(255, 255, 255, 0.72));
+            border-radius: 28px;
+            padding: 26px 24px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            min-height: 415px;
+            animation: fade-up 0.95s 0.2s ease both;
+        }
+
+        .hero-art::before {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: rgba(255, 127, 116, 0.15);
+            border-radius: 50%;
+            right: -48px;
+            top: -40px;
+        }
+
+        .scoops {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .scoop-card {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 14px;
+            box-shadow: 0 10px 22px rgba(86, 57, 45, 0.12);
+            animation: fade-up 0.6s ease both;
+        }
+
+        .scoop-card:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .scoop-card:nth-child(3) {
+            animation-delay: 0.25s;
+        }
+
+        .scoop-card:nth-child(4) {
+            animation-delay: 0.35s;
+        }
+
+        .swirl {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .scoop-card:nth-child(2) .swirl {
+            animation-delay: 0.6s;
+        }
+
+        .scoop-card:nth-child(3) .swirl {
+            animation-delay: 1.1s;
+        }
+
+        .scoop-card:nth-child(4) .swirl {
+            animation-delay: 1.6s;
+        }
+
+        .swirl-strawberry {
+            background: radial-gradient(circle at 30% 30%, #ffc6bf, #ff7f74 60%, #e55b52);
+        }
+
+        .swirl-mint {
+            background: radial-gradient(circle at 30% 30%, #cff9e6, #7ed8b2 62%, #54b089);
+        }
+
+        .swirl-vanilla {
+            background: radial-gradient(circle at 30% 30%, #fffef8, #ffe9ba 66%, #f2ca75);
+        }
+
+        .swirl-choco {
+            background: radial-gradient(circle at 30% 30%, #b58772, #7f4e3a 62%, #56392d);
+        }
+
+        .scoop-card h3 {
+            font-size: 0.97rem;
+            margin-bottom: 2px;
+        }
+
+        .scoop-card span {
+            font-size: 0.8rem;
+            opacity: 0.72;
+        }
+
+        .stripe {
+            margin: 24px 0 36px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            overflow: hidden;
+            animation: fade-up 0.85s ease both;
+        }
+
+        .stripe div {
+            text-align: center;
+            padding: 18px 14px;
+            background: #fff;
+        }
+
+        .stripe strong {
+            display: block;
+            font-size: 1.2rem;
+            color: var(--choco);
+            margin-bottom: 3px;
+        }
+
+        .flavors {
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .flavor-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: fade-up 0.7s ease both;
+        }
+
+        .flavor-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .flavor-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .flavor-top {
+            height: 130px;
+        }
+
+        .top-a {
+            background: linear-gradient(130deg, #ffaaa0, #ff725f);
+        }
+
+        .top-b {
+            background: linear-gradient(130deg, #9de8c9, #58c897);
+        }
+
+        .top-c {
+            background: linear-gradient(130deg, #ffdf99, #ffbf3d);
+        }
+
+        .flavor-body {
+            padding: 16px;
+        }
+
+        .flavor-body h3 {
+            font-size: 1.08rem;
+            margin-bottom: 8px;
+            color: var(--choco);
+        }
+
+        .flavor-body p {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            color: rgba(45, 34, 68, 0.9);
+        }
+
+        .tag {
+            display: inline-block;
+            font-weight: 800;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: #fff1d3;
+            color: #976500;
+        }
+
+        .quote {
+            margin-top: 28px;
+            border-radius: 20px;
+            background: linear-gradient(120deg, #ff7f74, #ff9f75);
+            color: #fff;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            animation: fade-up 0.8s ease both;
+        }
+
+        .quote p {
+            font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+            line-height: 1.7;
+            font-weight: 700;
+            margin-bottom: 10px;
+            max-width: 800px;
+        }
+
+        .quote small {
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 0 8px;
+            font-size: 0.9rem;
+            color: rgba(45, 34, 68, 0.82);
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        @media (max-width: 860px) {
-            .chrome-ui {
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                transform: translateY(-18px) scale(1.08);
+            }
+        }
+
+        @media (max-width: 960px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 26px;
+                padding-bottom: 34px;
+            }
+
+            nav {
                 display: none;
             }
 
-            .new-tab {
-                padding-top: 20px;
+            .hero-art {
+                min-height: 360px;
             }
 
-            .actions {
-                margin-bottom: 40px;
-                gap: 12px;
+            .flavors {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .wrap {
+                width: min(95%, 520px);
             }
 
-            .actions a {
-                font-size: 16px;
+            header {
+                padding-top: 18px;
             }
 
-            .logo {
-                margin-bottom: 22px;
+            .stripe {
+                grid-template-columns: 1fr;
             }
 
-            .google-search {
-                height: 54px;
+            .flavors {
+                grid-template-columns: 1fr;
             }
 
-            .google-search .placeholder,
-            .ai-chip {
-                font-size: 16px;
+            .scoops {
+                grid-template-columns: 1fr;
             }
 
-            .shortcuts {
-                grid-template-columns: repeat(3, minmax(74px, 1fr));
-                gap: 14px;
-                margin-top: 28px;
+            .hero-art {
+                min-height: auto;
             }
 
-            .shortcut-circle {
-                width: 58px;
-                height: 58px;
-            }
-
-            .shortcut span {
-                font-size: 14px;
+            footer {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
             }
         }
     </style>
 </head>
 <body>
-    <div class="window">
-        <header class="chrome-ui">
-            <div class="tab-row">
-                <div class="tab">
-                    <span class="tab-dot"></span>
-                    <span>New Tab</span>
-                </div>
-                <span class="plus">+</span>
-            </div>
-            <div class="address-row">
-                <span class="window-btn">&#x2039;</span>
-                <span class="window-btn">&#x203A;</span>
-                <div class="omnibox">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M15.5 14h-.8l-.3-.3a6 6 0 1 0-.7.7l.3.3v.8L19 20l1-1-4.5-5zM10 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
-                    </svg>
-                    <span>Search Google or type a URL</span>
-                </div>
-            </div>
-            <div class="bookmark-row">
-                <span style="font-size:20px;">&#9638;</span>
-                <div class="bookmark-item">ALO SCHOOL - stud...</div>
-                <div class="bookmark-item">Adobe Express</div>
-                <div class="bookmark-item">Online-Fix - Launchi...</div>
-            </div>
+    <div class="wrap">
+        <header>
+            <a href="#" class="logo">SCOOP STREET</a>
+            <nav>
+                <a href="#">Flavors</a>
+                <a href="#">Story</a>
+                <a href="#">Shops</a>
+                <a href="#">Order</a>
+            </nav>
         </header>
 
-        <main class="new-tab">
-            <div class="actions">
-                <a href="#">Gmail</a>
-                <a href="#">Images</a>
-                <span style="font-size:26px;">&#x2697;</span>
-                <div class="app-grid" aria-label="Apps">
-                    <span></span><span></span><span></span>
-                    <span></span><span></span><span></span>
-                    <span></span><span></span><span></span>
+        <section class="hero">
+            <div>
+                <h1>Ice Cream<br>For Loud Summer Days</h1>
+                <p>
+                    Handmade scoops, crunchy waffle cones, and candy cloud toppings. This is the corner shop where every flavor has a little drama and a lot of joy.
+                </p>
+                <div class="cta-row">
+                    <a href="#" class="btn btn-primary">Build My Sundae</a>
+                    <a href="#" class="btn btn-ghost">View Menu</a>
                 </div>
-                <div class="avatar" aria-hidden="true"></div>
             </div>
 
-            <section class="search-wrap">
-                <h1 class="logo">Google</h1>
-                <div class="google-search">
-                    <span class="left-icon">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M15.5 14h-.8l-.3-.3a6 6 0 1 0-.7.7l.3.3v.8L19 20l1-1-4.5-5zM10 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
-                        </svg>
-                    </span>
-                    <span class="placeholder">Search Google or type a URL</span>
-                    <span class="icon-btn">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V22h2v-3.1A7 7 0 0 0 19 12h-2z"/>
-                        </svg>
-                    </span>
-                    <span class="icon-btn">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M9 4 7.2 6H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.2L15 4H9zm3 13a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
-                        </svg>
-                    </span>
-                    <span class="ai-chip">
-                        <span style="font-size:18px;">&#10035;</span>
-                        <span>AI Mode</span>
-                    </span>
+            <aside class="hero-art" aria-label="Featured flavors">
+                <div class="scoops">
+                    <article class="scoop-card">
+                        <div class="swirl swirl-strawberry"></div>
+                        <h3>Berry Firecracker</h3>
+                        <span>Strawberry + Chili Sugar</span>
+                    </article>
+                    <article class="scoop-card">
+                        <div class="swirl swirl-mint"></div>
+                        <h3>Mint Jolt</h3>
+                        <span>Mint + Cacao Nibs</span>
+                    </article>
+                    <article class="scoop-card">
+                        <div class="swirl swirl-vanilla"></div>
+                        <h3>Sunbeam Vanilla</h3>
+                        <span>Madagascar Bean</span>
+                    </article>
+                    <article class="scoop-card">
+                        <div class="swirl swirl-choco"></div>
+                        <h3>Midnight Fudge</h3>
+                        <span>Dark Cocoa + Brownie</span>
+                    </article>
                 </div>
-            </section>
+            </aside>
+        </section>
 
-            <section class="shortcuts">
-                <div class="shortcut"><div class="shortcut-circle">W</div><span>png wing</span></div>
-                <div class="shortcut"><div class="shortcut-circle">F</div><span>flaticon</span></div>
-                <div class="shortcut"><div class="shortcut-circle">C</div><span>color hint</span></div>
-                <div class="shortcut"><div class="shortcut-circle">F</div><span>freepik</span></div>
-                <div class="shortcut"><div class="shortcut-circle">C</div><span>chatgpt</span></div>
-                <div class="shortcut"><div class="shortcut-circle">P</div><span>pinterest</span></div>
-                <div class="shortcut"><div class="shortcut-circle">M</div><span>mockupfree</span></div>
-                <div class="shortcut"><div class="shortcut-circle">A</div><span>anime</span></div>
-                <div class="shortcut"><div class="shortcut-circle">V</div><span>memes</span></div>
-                <div class="shortcut"><div class="shortcut-circle">*</div><span>claud</span></div>
-            </section>
-        </main>
+        <section class="stripe">
+            <div>
+                <strong>24</strong>
+                rotating flavors weekly
+            </div>
+            <div>
+                <strong>100%</strong>
+                fresh churned every morning
+            </div>
+            <div>
+                <strong>5 mins</strong>
+                average wait for pickup
+            </div>
+        </section>
+
+        <section class="flavors">
+            <article class="flavor-card">
+                <div class="flavor-top top-a"></div>
+                <div class="flavor-body">
+                    <h3>Cherry Disco</h3>
+                    <p>Cherry cream with cookie glitter and tart ribbon swirls for a bright first bite.</p>
+                    <span class="tag">Best Seller</span>
+                </div>
+            </article>
+            <article class="flavor-card">
+                <div class="flavor-top top-b"></div>
+                <div class="flavor-body">
+                    <h3>Pistachio Pop</h3>
+                    <p>Toasted pistachio base with salty caramel threads and crushed brittle crunch.</p>
+                    <span class="tag">New Flavor</span>
+                </div>
+            </article>
+            <article class="flavor-card">
+                <div class="flavor-top top-c"></div>
+                <div class="flavor-body">
+                    <h3>Lemon Carnival</h3>
+                    <p>Zippy lemon curd ice cream with vanilla wafers and soft marshmallow fold-ins.</p>
+                    <span class="tag">Limited Batch</span>
+                </div>
+            </article>
+        </section>
+
+        <section class="quote">
+            <p>"We made this shop for people who treat dessert like a celebration. One scoop can turn an ordinary walk into the best part of your week."</p>
+            <small>Rina Patel, Founder</small>
+        </section>
+
+        <footer>
+            <span>Open daily: 11:00 AM to 11:30 PM</span>
+            <span>47 Sugar Lane, Downtown</span>
+        </footer>
     </div>
-
-    <button class="customize" type="button">
-        <span style="font-size:17px;">&#9998;</span>
-        <span>Customize Chrome</span>
-    </button>
 </body>
 </html>
